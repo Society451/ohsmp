@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHSMP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="ohsmpLOGO.jfif" type="image/jfif"> <!-- Add favicon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- Add Font Awesome -->
+</head>
+<body>
+    <div class="video-container"> <!-- Ensure class name matches CSS -->
+        <video class="video-background" muted loop id="backgroundVideo"> <!-- Set playback speed -->
+            <source src="/video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pages/announcements.html">Announcements</a></li>
+            <li><a href="pages/blog.html">Blog</a></li>
+            <li><a href="pages/rules.html">Rules</a></li>
+            <li><a href="pages/whitelist.html">Whitelist</a></li>
+            <li><a href="pages/about.html">About</a></li>
+            <li><a href="pages/gallery.html">Gallery</a></li> <!-- Added Gallery option -->
+            <li><a href="pages/more.html">More</a></li>
+        </ul>
+    </nav>
+    <img src="ohsmp_title_render.png" alt="OHSMP Title" style="display: block; margin: 0 auto; width: 25%; padding: 10px;"> <!-- Make image slightly smaller and add padding -->
+    <h2>The Official Minecraft Server of Stanford Online High School</h2>
+    <div class="card centered-card">
+        <h2>IP: <code id="ip">play.ohsmp.com</code> <button class="copy-button" onclick="copyToClipboard('ip', this)"><i class="fa fa-clipboard"></i></button></h2>
+        <h3>Direct Connection: <code id="directConnection">172.240.13.165:25702</code> <button class="copy-button" onclick="copyToClipboard('directConnection', this)"><i class="fa fa-clipboard"></i></button></h3> <!-- Added direct connection -->
+    </div>
+    <!-- ...existing code... -->
+    <script src="script.js"></script> <!-- Include the script -->
+    <script>
+    function copyToClipboard(elementId, button) {
+        var copyText = document.getElementById(elementId).textContent;
+        navigator.clipboard.writeText(copyText).then(function() {
+            button.querySelector('i').classList.add('copied');
+            button.querySelector('i').style.color = '#8C1515'; // Change color to Stanford red
+            setTimeout(function() {
+                button.querySelector('i').classList.remove('copied');
+                button.querySelector('i').style.color = ''; // Reset color
+            }, 2000);
+        }, function(err) {
+            console.error('Could not copy text: ', err);
+        });
+    }
+    </script>
+</body>
+</html>
