@@ -209,6 +209,9 @@ nav ul li a:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin-bottom: 20px;
+    max-width: 500px; /* Increased maximum width by 20% */
+    margin-left: auto; /* Center the card */
+    margin-right: auto; /* Center the card */
 }
 
 .card h2, .card h3 {
@@ -246,4 +249,35 @@ nav ul li a:hover {
 
 .copy-button:hover {
     background-color: #bbb; /* Darker grey on hover */
+}
+
+.status-bubble {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.status-online {
+    background-color: green;
+}
+
+.status-offline {
+    background-color: red;
+}
+
+#serverInfo {
+    text-align: center; /* Center the text */
+}
+
+#serverInfo ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+#serverInfo ul li {
+    display: inline-block; /* Display list items inline */
+    margin: 0 5px; /* Add some margin between items */
 }

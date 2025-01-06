@@ -11,7 +11,7 @@
 <body>
     <div class="video-container"> <!-- Ensure class name matches CSS -->
         <video class="video-background" muted loop id="backgroundVideo"> <!-- Set playback speed -->
-            <source src="video.mp4" type="video/mp4">
+            <source src="/video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
@@ -32,6 +32,11 @@
         <h2>IP: <code id="ip">play.ohsmp.com</code> <button class="copy-button" onclick="copyToClipboard('ip', this)"><i class="fa fa-clipboard"></i></button></h2>
         <h3>Direct Connection: <code id="directConnection">172.240.13.165:25702</code> <button class="copy-button" onclick="copyToClipboard('directConnection', this)"><i class="fa fa-clipboard"></i></button></h3> <!-- Added direct connection -->
     </div>
+    <div class="card centered-card" id="serverInfoCard">
+        <h2>Live Server Status</h2>
+        <div id="serverInfo"></div>
+        <p id="lastChecked"></p>
+    </div>
     <!-- ...existing code... -->
     <script src="script.js"></script> <!-- Include the script -->
     <script>
@@ -48,6 +53,64 @@
             console.error('Could not copy text: ', err);
         });
     }
+
+    const serverIp = '172.240.13.165:25702';
+    const apiUrl = `https://api.mcsrvstat.us/2/${serverIp}`;
+    let lastCheckedTime = Date.now();
+
+    function checkServerStatus() {
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const serverInfo = document.getElementById('serverInfo');
+                try {
+                    serverInfo.innerHTML = `
+                        <p><strong>Online:</strong> <span class="status-bubble ${data.online ? 'status-online' : 'status-offline'}"></span></p>
+                        <p><strong>Players:</strong> <span>${data.players.online} / ${data.players.max}</span></p>
+                        ${data.players && data.players.list && data.players.list.length > 0 ? `
+                            <p><strong>Online Players:</strong></p>
+                            <ul>
+                                ${data.players.list.map(player => `<li>${player}</li>`).join('')}
+                            </ul>
+                        ` : '<p>No players online.</p>'}
+                        <p><strong>Version:</strong> <span>${data.version}</span></p>
+                        <p><strong>Motd:</strong> <span>${data.motd.clean.join('<br>')}</span></p>
+                        ${data.software ? `<p><strong>Server Type:</strong> <span>${data.software}</span></p>` : ''}
+                        ${data.plugins ? `<p><strong>Plugins:</strong> <span>${data.plugins.names.join(', ')}</span></p>` : ''}
+                        ${data.mods ? `<p><strong>Mods:</strong> <span>${data.mods.names.join(', ')}</span></p>` : ''}
+                    `;
+                } catch (error) {
+                    serverInfo.innerHTML = `<p style="color: red;">Server is offline.</p>`;
+                }
+
+                lastCheckedTime = Date.now();
+                updateLastChecked();
+            })
+            .catch(error => {
+                document.getElementById('serverInfo').innerHTML = `<p style="color: red;">Server is offline.</p>`;
+            });
+    }
+
+    function updateLastChecked() {
+        const now = Date.now();
+        const secondsSinceLastCheck = Math.floor((now - lastCheckedTime) / 1000);
+        document.getElementById('lastChecked').innerText = `Last checked: ${secondsSinceLastCheck} seconds ago`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkServerStatus();
+        setInterval(() => {
+            checkServerStatus();
+            updateLastChecked();
+        }, 5000);
+    });
+
+    setInterval(updateLastChecked, 1000);
     </script>
 </body>
 </html>
