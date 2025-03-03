@@ -100,10 +100,6 @@ nav ul li a:hover {
     /* Removed hover animation */
 }
 
-.rules-container .card:hover {
-    /* Removed hover animation */
-}
-
 .rules-container h1 {
     margin-bottom: 20px;
 }
@@ -138,13 +134,7 @@ nav ul li a:hover {
     z-index: 3; /* Ensure it is above the video background */
 }
 
-.blog-container .card:hover {
-    /* Removed hover animation */
-}
 
-.blog-container article:hover {
-    /* Removed hover animation */
-}
 
 .blog-container article h2 {
     margin-top: 0;
@@ -173,9 +163,6 @@ nav ul li a:hover {
     /* Removed hover animation */
 }
 
-.about-container .card:hover {
-    /* Removed hover animation */
-}
 
 .about-container h1 {
     margin-bottom: 20px;
