@@ -169,7 +169,7 @@ function loadAndAnimateMarkdown(markdownPath = '../assets/rules.md') {
         });
 }
 
-// Function to enhance whitelist markdown with special formatting
+// Function to enhance whitelist markdown with cleaner formatting
 function enhanceWhitelistMarkdown(markdown, container) {
     // Parse markdown to basic HTML
     const htmlContent = marked.parse(markdown);
@@ -181,23 +181,23 @@ function enhanceWhitelistMarkdown(markdown, container) {
     // Find all sections (h2 headings)
     const sections = tempDiv.querySelectorAll('h2');
     
-    // Create table of contents
-    const toc = document.createElement('div');
-    toc.className = 'whitelist-toc';
-    
-    const tocTitle = document.createElement('h3');
-    tocTitle.textContent = 'Quick Navigation';
-    toc.appendChild(tocTitle);
-    
-    const tocList = document.createElement('ul');
-    
     // Create search filter for the whitelist
     const searchDiv = document.createElement('div');
     searchDiv.className = 'whitelist-search';
     searchDiv.innerHTML = `
-        <input type="text" id="playerSearch" placeholder="Search for a player..." />
+        <input type="text" id="playerSearch" placeholder="Find a player..." />
         <button id="searchButton"><i class="fa fa-search"></i></button>
     `;
+    
+    // Create simple table of contents
+    const toc = document.createElement('div');
+    toc.className = 'whitelist-toc';
+    
+    const tocTitle = document.createElement('h3');
+    tocTitle.textContent = 'Jump to Section';
+    toc.appendChild(tocTitle);
+    
+    const tocList = document.createElement('ul');
     
     // Add section IDs and build TOC
     sections.forEach((section, index) => {
@@ -222,7 +222,7 @@ function enhanceWhitelistMarkdown(markdown, container) {
     
     toc.appendChild(tocList);
     
-    // Enhance the whitelisted players section with a grid layout
+    // Enhance the whitelisted players section with a clean grid layout
     const whitelistedSection = Array.from(sections).find(section => 
         section.textContent.includes('Currently Whitelisted'));
     
@@ -247,7 +247,7 @@ function enhanceWhitelistMarkdown(markdown, container) {
                     const playerInfo = match[2];
                     
                     playerCard.innerHTML = `
-                        <div class="player-username"><strong>${playerName}</strong></div>
+                        <div class="player-username">${playerName}</div>
                         <div class="player-info">${playerInfo}</div>
                     `;
                 } else {
@@ -261,7 +261,7 @@ function enhanceWhitelistMarkdown(markdown, container) {
         }
     }
     
-    // Style the factions section
+    // Add a cleaner style to the factions section
     const factionsSection = Array.from(tempDiv.querySelectorAll('h2')).find(section => 
         section.textContent.includes('Factions & Kingdoms'));
     
@@ -288,9 +288,14 @@ function enhanceWhitelistMarkdown(markdown, container) {
         const playersGrid = document.getElementById('playersGrid');
         
         if (searchInput && searchButton && playersGrid) {
+            // Update placeholder text with total count
+            const playerCount = playersGrid.querySelectorAll('.player-card').length;
+            searchInput.placeholder = `Search ${playerCount} players...`;
+            
             const handleSearch = () => {
                 const searchTerm = searchInput.value.toLowerCase();
                 const playerCards = playersGrid.querySelectorAll('.player-card');
+                let matchCount = 0;
                 
                 playerCards.forEach(card => {
                     const username = card.querySelector('.player-username').textContent.toLowerCase();
@@ -298,19 +303,46 @@ function enhanceWhitelistMarkdown(markdown, container) {
                     
                     if (username.includes(searchTerm) || info.includes(searchTerm)) {
                         card.style.display = '';
-                        card.classList.add('highlight-match');
-                        setTimeout(() => {
-                            card.classList.remove('highlight-match');
-                        }, 1500);
+                        if (searchTerm.length > 0) {
+                            card.classList.add('highlight-match');
+                            setTimeout(() => {
+                                card.classList.remove('highlight-match');
+                            }, 1500);
+                        }
+                        matchCount++;
                     } else {
                         card.style.display = 'none';
                     }
                 });
+                
+                // Show match count
+                if (searchTerm.length > 0) {
+                    const resultText = document.createElement('div');
+                    resultText.className = 'search-results';
+                    resultText.textContent = `${matchCount} player${matchCount !== 1 ? 's' : ''} found`;
+                    resultText.style.textAlign = 'center';
+                    resultText.style.fontSize = '0.9em';
+                    resultText.style.marginTop = '10px';
+                    resultText.style.color = '#666';
+                    
+                    const oldResults = document.querySelector('.search-results');
+                    if (oldResults) oldResults.remove();
+                    
+                    searchDiv.appendChild(resultText);
+                } else {
+                    const oldResults = document.querySelector('.search-results');
+                    if (oldResults) oldResults.remove();
+                }
             };
             
             searchButton.addEventListener('click', handleSearch);
-            searchInput.addEventListener('keypress', (e) => {
+            searchInput.addEventListener('keyup', (e) => {
                 if (e.key === 'Enter') handleSearch();
+                // Auto-search after a short delay
+                if (e.key !== 'Enter') {
+                    clearTimeout(searchInput.searchTimeout);
+                    searchInput.searchTimeout = setTimeout(handleSearch, 300);
+                }
             });
         }
         
@@ -327,7 +359,7 @@ function enhanceWhitelistMarkdown(markdown, container) {
                         behavior: 'smooth'
                     });
                     
-                    // Highlight the section briefly
+                    // Gently highlight the section
                     targetElement.classList.add('highlight-section');
                     setTimeout(() => {
                         targetElement.classList.remove('highlight-section');
