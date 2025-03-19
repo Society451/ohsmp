@@ -268,3 +268,72 @@ nav ul li a:hover {
     display: inline-block; /* Display list items inline */
     margin: 0 5px; /* Add some margin between items */
 }
+
+/* Rules page markdown container */
+.markdown-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+}
+
+/* Markdown content styling */
+.markdown-container h1 {
+    color: #8C1515; /* Stanford red */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.markdown-container h2 {
+    color: #333;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.markdown-container h3 {
+    color: #444;
+    margin-top: 20px;
+}
+
+.markdown-container ul, .markdown-container ol {
+    padding-left: 25px;
+    margin-bottom: 15px;
+}
+
+.markdown-container li {
+    margin-bottom: 8px;
+}
+
+.markdown-container code {
+    background-color: #f4f4f4;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+.markdown-container pre {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+/* Animation for markdown elements */
+.animated-element {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
